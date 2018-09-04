@@ -1,0 +1,68 @@
+package Prueba_Oiga_MQ.oiga;
+
+import javax.jms.Connection;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageListener;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+
+import org.apache.activemq.spring.ActiveMQConnectionFactory;
+
+public class OigaConsumer {
+	
+	private final String connectionUri = "oiga:tcp://localhost:61616";
+    private ActiveMQConnectionFactory connectionFactory;
+    private Connection connection;
+    private Session session;
+    private Destination destination;
+    
+        
+    private static class HelloMessageListener implements MessageListener {
+
+        public void onMessage(Message message) {
+            TextMessage textMessage = (TextMessage) message;
+            try {
+                System.out.println("Consumer Empresa B " + Thread.currentThread().getName() + " Widgest Recibidos " + textMessage.getText());
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+        }
+        
+    }
+    
+    public void before() throws Exception {
+        connectionFactory = new ActiveMQConnectionFactory(connectionUri);
+        connection = connectionFactory.createConnection();
+        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        MessageConsumer consumer = session.createConsumer(session.createQueue("OigaQueue"));
+        consumer.setMessageListener(new HelloMessageListener());
+    }
+
+    public void after() throws Exception {
+        if (connection != null) {
+            connection.close();
+        }
+    }
+
+    
+    public static void main(String[] args) {
+    	OigaConsumer producer = new OigaConsumer();
+        System.out.print("\n\n\n");
+        System.out.println("Empresa B Compradora de widgets");
+        
+        int cantidad =11;
+        
+        try {
+            producer.before();
+            producer.run(cantidad);
+            producer.after();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        System.out.println("Finalizo la produccion de widgets de la empresa A");
+        System.out.print("\n\n\n");
+    }
+}

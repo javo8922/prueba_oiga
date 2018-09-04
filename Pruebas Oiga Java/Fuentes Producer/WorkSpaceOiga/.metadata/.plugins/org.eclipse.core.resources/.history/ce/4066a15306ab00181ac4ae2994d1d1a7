@@ -1,0 +1,66 @@
+package Prueba_Oiga_MQ.oiga;
+
+
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+import javax.jms.Connection;
+import javax.jms.Destination;
+import javax.jms.Message;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+
+import org.apache.activemq.ActiveMQConnectionFactory;
+
+public class FailoverProducer {
+
+    private final String connectionUri = "failover:tcp://localhost:61616";
+    private ActiveMQConnectionFactory connectionFactory;
+    private Connection connection;
+    private Session session;
+    private Destination destination;
+
+    public void before() throws Exception {
+        connectionFactory = new ActiveMQConnectionFactory(connectionUri);
+        connection = connectionFactory.createConnection();
+        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        destination = session.createQueue("MyQueue");
+    }
+
+    public void after() throws Exception {
+        if (connection != null) {
+            connection.close();
+        }
+    }
+
+    public void run(int cantidad) throws Exception {
+        MessageProducer producer = session.createProducer(destination);
+        for (int i = 1; i <= cantidad; ++i) {
+            Message message = session.createMessage();
+            message.setIntProperty("num", i);
+            producer.send(message);
+            System.out.println("ID:" + i + " Timestamp: " + new Date());
+            //TimeUnit.SECONDS.sleep(1);
+        }
+        TimeUnit.SECONDS.sleep(60);
+        //producer.close();
+    }
+
+    public static void main(String[] args) {
+        FailoverProducer producer = new FailoverProducer();
+        System.out.print("\n\n\n");
+        System.out.println("Empresa A Productora de widgets");
+        
+        int cantidad =0;
+        
+        try {
+            producer.before();
+            producer.run(cantidad);
+            producer.after();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        System.out.println("Finalizo la produccion de widgets de la empresa A");
+        System.out.print("\n\n\n");
+    }
+}

@@ -1,0 +1,19 @@
+package Prueba_Oiga_MQ.oiga;
+
+import com.javainuse.consumer.Consumer;
+import com.javainuse.producer.Producer;
+
+public class BuyBuyWidgets {
+
+    public static void main(String[] args) {
+    	OigaProducer producer = new OigaProducer();
+        OigaConsumer consumer = new OigaConsumer();
+ 
+       producer.main(args);
+ 
+        Thread consumerThread = new Thread(consumer);
+        consumerThread.start();
+
+    }
+
+}

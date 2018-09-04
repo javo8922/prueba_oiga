@@ -1,0 +1,49 @@
+package oiga_consumer;
+
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.command.ActiveMQQueue;
+
+/**
+ *
+ */
+public final class Consumer_Empresa_B {
+
+    /**
+     *
+     */
+    private Consumer_Empresa_B() {
+    }
+
+    public static void main(String[] args) throws JMSException, InterruptedException {
+
+        int cantidad_compra = Integer.parseInt(args[0]); 
+    	
+    	
+        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
+        Destination destination = new ActiveMQQueue("yQueue");
+
+        Connection connection = connectionFactory.createConnection();
+        connection.start();
+
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        MessageConsumer consumer = session.createConsumer(destination);
+
+               
+        for (int j = 1; j <= cantidad_compra; j++) {
+	        TextMessage textMsg = (TextMessage) consumer.receive();
+	        System.out.println("Recibido: " + textMsg.getText());
+	        //session.close();
+        }
+
+        connection.close();
+    }
+}

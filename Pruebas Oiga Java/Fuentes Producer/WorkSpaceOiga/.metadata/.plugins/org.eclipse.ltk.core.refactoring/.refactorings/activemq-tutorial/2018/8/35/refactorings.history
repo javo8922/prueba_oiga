@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;TestMQ.java&apos; to &apos;oiga/src/main/java/Prueba_Oiga_MQ.oiga&apos;&#x0D;&#x0A;- Original project: &apos;activemq-tutorial&apos;&#x0D;&#x0A;- Destination element: &apos;oiga/src/main/java/Prueba_Oiga_MQ.oiga&apos;&#x0D;&#x0A;- Original element: &apos;com.javainuse.main.TestMQ.java&apos;" description="Copy compilation unit" destination="=oiga/src\/main\/java&lt;Prueba_Oiga_MQ.oiga" element1="/src&lt;com.javainuse.main{TestMQ.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1535491769425" units="1" version="1.0"/>
+</session>

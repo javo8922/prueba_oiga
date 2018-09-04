@@ -1,0 +1,18 @@
+package Prueba_Oiga_MQ.oiga;
+
+import javax.jms.JMSException;
+
+public class BuyWidgets {
+
+    public static void main(String[] args) throws JMSException {
+    	OigaProducer producer = new OigaProducer();
+        OigaConsumer consumer = new OigaConsumer();
+ 
+       producer.main(args);
+ 
+        Thread consumerThread = new Thread((Runnable) consumer);
+        consumerThread.start();
+
+    }
+
+}

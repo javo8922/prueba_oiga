@@ -1,0 +1,15 @@
+package Prueba_Oiga_MQ.oiga;
+
+
+public class BuyBuyWidgets {
+
+    public static void main(String[] args) {
+    	OigaProducer producer = new OigaProducer();
+        Consumer consumer = new Consumer();
+ 
+       producer.main(args);
+        
+
+    }
+
+}
